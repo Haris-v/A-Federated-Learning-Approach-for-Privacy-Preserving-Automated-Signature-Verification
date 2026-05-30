@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  fl_training:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_training
+    volumes:
+      - plots:/modifier/plots  # Maps local ./saved_plots to /output in container
+
+volumes:
+  plots:
