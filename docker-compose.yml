@@ -7,7 +7,11 @@ services:
       dockerfile: Dockerfile
     container_name: fl_training
     volumes:
-      - plots:/modifier/plots  # Maps local ./saved_plots to /output in container
-
-volumes:
-  plots:
+      - ./data/signatures:/code/data/signatures
+      - ./data/classification/signatures:/code/data/classification/signatures
+      - ./data/classification/signaturesRF:/code/data/classification/signaturesRF
+      - ./data/classification/preprocessedRF:/code/data/classification/preprocessedRF
+      - ./data/augmented:/code/data/augmented
+      - ./results/plots:/code/results/plots
+      - ./results/trained_model_weights:/code/results/trained_model_weights
+      - ./results/lr_auc_results:/code/results/lr_auc_results

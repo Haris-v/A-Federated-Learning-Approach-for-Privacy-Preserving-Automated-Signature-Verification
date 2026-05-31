@@ -1,5 +1,4 @@
 from Client_dataset import Dataset
-from version_test_runtime import print_usage_versions_and_configuration_cpu_gpu_usage
 import models as model
 import utils 
 import tensorflow as tf
@@ -15,8 +14,8 @@ if sys.version_info < (3, 9):
     import typing_extensions
     sys.modules['typing'] = typing_extensions
 import tensorflow_federated as tff
-import nest_asyncio
-nest_asyncio.apply()
+# import nest_asyncio
+# nest_asyncio.apply()
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -29,13 +28,8 @@ from pathlib import Path
 import gc
 
 
-from load_tff_dataset import Load_tff_dataset 
-
-
-
 tf.keras.backend.clear_session()
 
-print_usage_versions_and_configuration_cpu_gpu_usage()
 precision = mixed_precision.Policy('mixed_float16')
 mixed_precision.set_global_policy(precision)
 
@@ -591,7 +585,7 @@ federated_test_data_without_sf = make_testing_federated_data(test_dataset_withou
 
 trained_weights = train_state.global_model_weights
 
-model_save_dir_path=f"/code/modifier/trained_model_weights"
+model_save_dir_path=f"/code/results/trained_model_weights"
 
 # Test model with skilled forgeries
 predictions, truePositives, falseNegatives, trueNegatives, falsePositives = model_fn_pred(trained_weights, 

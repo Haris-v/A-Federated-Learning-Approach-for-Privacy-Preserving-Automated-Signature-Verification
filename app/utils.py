@@ -66,7 +66,7 @@ def plot_metrics(train_metrics, eval_metrics, metric_name, ylabel):
     plt.grid(True)
     plt.show()
 
-    filename = f"/code/modifier/plots/{metric_name.lower().replace(' ', '_')}_plot.png"
+    filename = f"/code/results/plots/{metric_name.lower().replace(' ', '_')}_plot.png"
     plt.savefig(filename)
     print(f"Saved plot to {filename}")
     plt.close()  
@@ -89,7 +89,7 @@ def plot_metrics_EER_threshold(thresholds, far_history, frr_history, eer_thresho
     plt.show()
 
 
-    filename = f"/code/modifier/plots/FAR_FRR_EER_without_grid_search.png"
+    filename = f"/code/results/plots/FAR_FRR_EER_without_grid_search.png"
 
     plt.savefig(filename)
     print(f"Saved plot to {filename}")

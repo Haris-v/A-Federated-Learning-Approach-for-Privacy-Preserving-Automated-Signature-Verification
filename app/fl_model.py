@@ -194,14 +194,14 @@ def plot_metrics(train_metrics, eval_metrics, metric_name, ylabel):
     plt.grid(True)
     plt.show()
 
-    filename = f"/code/modifier/plots/{metric_name.lower().replace(' ', '_')}_plot.png"
+    filename = f"/code/results/plots/{metric_name.lower().replace(' ', '_')}_plot.png"
     plt.savefig(filename)
     print(f"Saved plot to {filename}")
     plt.close()  # Clear the figure to free memory
 
 # =================================================================================
 def save_lr_in_csv(client_lr, server_lr, data, best_auc, num):
-    csv_file=f"/code/modifier/lr_auc_results/learning_rates_{num}.csv"
+    csv_file=f"/code/results/lr_auc_results/learning_rates_{num}.csv"
     file_exists = os.path.isfile(csv_file)
     with open(csv_file, mode='a', newline='') as file:
         writer = csv.writer(file)
@@ -359,7 +359,7 @@ plt.ylabel("Server Learning Rates")
 plt.tight_layout()
 plt.show()
 
-filename = f"/code/modifier/plots/grid_search_plot_{len(server_learning_rates)}.png"
+filename = f"/code/results/plots/grid_search_plot_{len(server_learning_rates)}.png"
 plt.savefig(filename)
 print(f"Saved plot to {filename}")
 plt.close()  # Clear the figure to free memory

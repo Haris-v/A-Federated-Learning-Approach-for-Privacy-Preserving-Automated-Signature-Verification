@@ -7,16 +7,20 @@ import random
 class Image_classification():
 
     ROOT_WINDOWS_FOLDER_PATH = Path(r"..\data\signatures")
-    DOCKER_ROOT_WINDOWS_FOLDER_PATH = Path("code\data\signatures")
+    # DOCKER_ROOT_WINDOWS_FOLDER_PATH = Path("code\data\signatures")
+    ROOT_DOCKER_FOLDER_PATH = Path("/code/data/signatures")
 
-    DATA_CLASSIFICATION_FOLDER_PATH = Path(r"..\data\classification\signatures")
-    DOCKER_DATA_CLASSIFICATION_FOLDER_PATH = Path("code\data\classification\signatures")
+    # DATA_CLASSIFICATION_FOLDER_PATH = Path(r"..\data\classification\signatures")
+    # DOCKER_DATA_CLASSIFICATION_FOLDER_PATH = Path("code\data\classification\signatures")
 
-    DATA_CLASSIFICATION_FOLDER_PATH_RF = Path(r"..\data\classification\signaturesRF")
-    DOCKER_DATA_CLASSIFICATION_FOLDER_PATH_RF = Path("code\data\classification\signaturesRF")
+    # DATA_CLASSIFICATION_FOLDER_PATH_RF = Path(r"..\data\classification\signaturesRF")
+    # DOCKER_DATA_CLASSIFICATION_FOLDER_PATH_RF = Path("code\data\classification\signaturesRF")
+    ROOT_WINDOWS_FOLDER_PATH = Path("/code/data/signatures")
+    DATA_CLASSIFICATION_FOLDER_PATH = Path("/code/data/classification/signatures")
+    DATA_CLASSIFICATION_FOLDER_PATH_RF = Path("/code/data/classification/signaturesRF")
 
     # Path for docker
-    # ROOT_DOCKER_FOLDER_PATH = Path("code/data/signatures")
+
 
     PNG_FILE_PREFIX = ".png"
     CLIENT_FOLDER_PREFIX = "client_"
@@ -53,7 +57,7 @@ class Image_classification():
                 
                     
     def sort_images_by_clientid(self):
-        for root, dirs, files in os.walk(self.ROOT_WINDOWS_FOLDER_PATH):
+        for root, dirs, files in os.walk(self.ROOT_DOCKER_FOLDER_PATH):
             print("Reading files from: ", root)
             self.save_raw_images_by_client(files, root, self.DATA_CLASSIFICATION_FOLDER_PATH)
 
@@ -62,6 +66,7 @@ class Image_classification():
         client_counter = 1
         random_forgeries = []
         for root, dirs, files in os.walk(self.DATA_CLASSIFICATION_FOLDER_PATH):
+
             
             #Check if the image is random forgery or not
             if client_counter <= 31:
@@ -77,7 +82,7 @@ class Image_classification():
         root=None
         print(f"The total number of random forgery files: {len(random_forgeries)}")
         self.save_raw_images_by_client_with_random_forgeries(random_forgeries, root, self.DATA_CLASSIFICATION_FOLDER_PATH_RF, is_random_forgeries=True)
-        
+
 
             
     def save_raw_images_by_client_with_random_forgeries(self, files, from_root, to_root_folder, is_random_forgeries):
@@ -118,7 +123,7 @@ class Image_classification():
 
     def save_the_image(self, from_folder_path, item_name, to_folder_path, item_saved_name):
         
-        if not os.path.exists(to_folder_path / item_name):
+        if not os.path.exists(to_folder_path / item_name) or not os.path.exists(to_folder_path / item_saved_name):
 
             if from_folder_path is not None:
                 img = Image.open(Path(from_folder_path) / item_name) # or Image.open(from_folder_path + "\\" + item)
@@ -148,6 +153,3 @@ class Image_classification():
             return self.CLIENT_FOLDER_PREFIX + str(number_of_client)
         else:
             return self.CLIENT_FOLDER_PREFIX + "0" + str(number_of_client)
-
-classification_data = Image_classification()
-classification_data.sort_images_by_clientid_with_random_forgeries()

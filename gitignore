@@ -1,9 +1,7 @@
 .git/
 __pycache__/
 env/
-tff_dataset/
 data/
-back_up/
 notes_example/
-experiments/
+exp/
 trained_model_weights/

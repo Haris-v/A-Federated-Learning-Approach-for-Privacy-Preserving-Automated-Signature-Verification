@@ -2,7 +2,7 @@ import os
 from sys import prefix
 import PIL.ImageShow
 # from modifier.save_read_tff_Dataset import save_federated_dataset
-from save_read_tff_Dataset import save_federated_dataset
+from Image_client_classification import Image_classification
 # from save_read_tff_Dataset import save_federated_dataset, save_single_federated_dataset
 import tensorflow as tf
 # import tensorflow_addons as tfa
@@ -21,18 +21,14 @@ from collections import defaultdict
 
 
 class Dataset():
-    DATA_CLASSIFICATION_WINDOWS_FOLDER_PATH = Path(r"..\data\classification\signatures")
-    DATA_CLASSIFICATION_SIGNATURE_RF_WINDOWS_FOLDER_PATH = Path(r"..\data\classification\signaturesRF")
 
-    DATA_PREPROCESSED_CLASSIFICATION_FOLDER_PATH = Path(r"..\data\classification\preprocessed")
-    # DATA_PREPROCESSED_SIGNATURE_RF_CLASSIFICATION_FOLDER_PATH = Path(r"..\data\classification\preprocessedRF")
-    # DATA_PREPROCESSED_SIGNATURE_CLASSIFICATION_FOLDER_PATH = Path(r"/code/data/classification/preprocessed")
-    DATA_PREPROCESSED_SIGNATURE_RF_CLASSIFICATION_FOLDER_PATH = Path(r"/code/data/classification/preprocessedRF")   
-
-    DATA_AUGMENTED_SIGNATURE_RF_FOLDER_PATH = Path(r"/code/data/augmented") #not used
-    #Path for docker.
     DATA_CLASSIFICATION_DOCKER_FOLDER_PATH = Path("/code/data/classification/signatures")
     DATA_CLASSIFICATION_SIGNATURE_RF_DOCKER_FOLDER_PATH = Path("/code/data/classification/signaturesRF")
+
+    DATA_PREPROCESSED_CLASSIFICATION_FOLDER_PATH = Path(r"..\data\classification\preprocessed")
+    DATA_PREPROCESSED_SIGNATURE_RF_CLASSIFICATION_FOLDER_PATH = Path(r"/code/data/classification/preprocessedRF")   
+    DATA_AUGMENTED_SIGNATURE_RF_FOLDER_PATH = Path(r"/code/data/augmented") #not used
+    #Path for docker.
 
 
 
@@ -52,6 +48,11 @@ class Dataset():
         eval_client_dataset={}
         test_client_dataset={}
         test_client_dataset_without_skilled={}
+
+        classification_data = Image_classification()
+        classification_data.sort_images_by_clientid()  
+        classification_data.sort_images_by_clientid_with_random_forgeries()
+        # self.preprocess_and_save_all()
 
         if self.path is None:
             # self.path = self.DATA_CLASSIFICATION_DOCKER_FOLDER_PATH
@@ -80,15 +81,7 @@ class Dataset():
                 print("---------------------------------------")
 
                 seed_counter += 1
-   
-        #  Paths for saving the dataset into tff.records that is tf.data.Dataset (the federated dataset) instead the images
-        to_save_train_data_path = Path(r"..\data\tff_dataset\train")
-        to_save_eval_data_path = Path(r"..\data\tff_dataset\eval")
-        #
-        # Save the tf.data.Dataset dataset in tf.records format
-        # save_federated_dataset(train_client_dataset, to_save_train_data_path)
-        # save_federated_dataset(eval_client_dataset, to_save_eval_data_path)
-        # save_federated_dataset(test_client_dataset, to_save_test_data_path)
+
 
         return train_client_dataset, eval_client_dataset, [test_client_dataset, test_dataset_labels], [test_client_dataset_without_skilled, test_labels_without_skilled]
  
@@ -241,6 +234,52 @@ class Dataset():
             return dataset
 
 
+    # def preprocess_and_save_all(self):
+    #     """
+    #     Διαβάζει όλα τα images από το signaturesRF,
+    #     κάνει preprocessing και τα αποθηκεύει στο preprocessedRF.
+    #     Ανεξάρτητο από train/eval/test split.
+    #     """
+    #     if self.path is None:
+    #         self.path = self.DATA_CLASSIFICATION_SIGNATURE_RF_DOCKER_FOLDER_PATH
+
+    #     total_saved = 0
+    #     total_skipped = 0
+
+    #     for root, dirs, files in os.walk(self.path):
+    #         image_files = [f for f in files if self.is_image(f)]
+            
+    #         if not image_files:
+    #             continue
+
+    #         client_id = self.get_client_id(root)
+    #         print(f"\nProcessing client: {client_id} ({len(image_files)} images)")
+
+    #         for item in image_files:
+    #             img = Image.open(os.path.join(root, item))
+    #             image_name = img.filename.split("/")[-1]
+
+    #             image = ImageOps.grayscale(img)
+    #             resized_image = self.resize_image_axis(224, 224, image)
+    #             processed_image = self.background_improvement(resized_image, image_name=image_name)
+                
+    #             saved = self.save_preprocessed_images(
+    #                 processed_image,
+    #                 self.DATA_PREPROCESSED_SIGNATURE_RF_CLASSIFICATION_FOLDER_PATH,
+    #                 img.filename
+    #             )
+    #             img.close()
+
+    #             if saved:
+    #                 total_saved += 1
+    #             else:
+    #                 total_skipped += 1
+
+    #     print(f"\n{'='*50}")
+    #     print(f"Preprocessing complete!")
+    #     print(f"  Saved:   {total_saved}")
+    #     print(f"  Skipped: {total_skipped} (already existed)")
+    #     print(f"{'='*50}")
 
     def resize_image_axis(self, width_max, heigth_max, image):
 

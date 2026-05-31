@@ -1,5 +1,5 @@
-from modifier.Image_client_classification import Image_classification
-from modifier.Client_dataset import Dataset
+from app.Image_client_classification import Image_classification
+from app.Client_dataset import Dataset
 
 print("The image sorting by client id is started...")
 print("")
